@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace CyrildeWit\EloquentViewable\Tests;
 
 use CyrildeWit\EloquentViewable\Tests\TestClasses\Models\Post;
+use CyrildeWit\EloquentViewable\Tests\TestClasses\Models\PostSoftdeletes;
 use CyrildeWit\EloquentViewable\View;
 
 class ViewableObserverTest extends TestCase
@@ -47,5 +48,24 @@ class ViewableObserverTest extends TestCase
         $this->post->delete();
 
         $this->assertEquals(3, View::count());
+    }
+
+    /** @test */
+    public function somethings()
+    {
+        $postSoftdeletes = factory(PostSoftdeletes::class)->create();
+
+        $postSoftdeletes->removeViewsOnDelete = true;
+
+        TestHelper::createView($postSoftdeletes);
+        TestHelper::createView($postSoftdeletes);
+        TestHelper::createView($postSoftdeletes);
+        TestHelper::createView($postSoftdeletes);
+
+        $this->assertEquals(4, View::count());
+
+        $postSoftdeletes->forceDelete();
+
+        $this->assertEquals(1, View::count());
     }
 }

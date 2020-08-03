@@ -17,6 +17,7 @@ class ViewableObserver
      */
     public function deleted(Viewable $viewable)
     {
+        dd('Deleted event handled by ViewableObserver');
         if ($this->removeViewsOnDelete($viewable)) {
             Container::getInstance()->make(Views::class)->forViewable($viewable)->destroy();
         }
