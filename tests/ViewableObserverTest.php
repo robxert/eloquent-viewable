@@ -60,12 +60,11 @@ class ViewableObserverTest extends TestCase
         TestHelper::createView($postSoftdeletes);
         TestHelper::createView($postSoftdeletes);
         TestHelper::createView($postSoftdeletes);
-        TestHelper::createView($postSoftdeletes);
 
-        $this->assertEquals(4, View::count());
+        $this->assertEquals(3, View::count());
 
         $postSoftdeletes->forceDelete();
 
-        $this->assertEquals(1, View::count());
+        $this->assertEquals(0, View::count());
     }
 }
