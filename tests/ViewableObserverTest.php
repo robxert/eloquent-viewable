@@ -67,4 +67,55 @@ class ViewableObserverTest extends TestCase
 
         $this->assertEquals(0, View::count());
     }
+
+    /** @test */
+    public function somethings2()
+    {
+        app()->bind(
+            \CyrildeWit\EloquentViewable\Contracts\View::class,
+            \CyrildeWit\EloquentViewable\Tests\TestClasses\ViewSoftdeletes::class
+        );
+
+        $postSoftdeletes = factory(PostSoftdeletes::class)->create();
+
+        TestHelper::createView($postSoftdeletes);
+        TestHelper::createView($postSoftdeletes);
+        TestHelper::createView($postSoftdeletes);
+
+        $this->assertEquals(3, \CyrildeWit\EloquentViewable\Tests\TestClasses\ViewSoftdeletes::count());
+
+        $postSoftdeletes->delete();
+
+        $this->assertEquals(0, \CyrildeWit\EloquentViewable\Tests\TestClasses\ViewSoftdeletes::count());
+        $this->assertEquals(3, $postSoftdeletes->views()->withTrashed()->count());
+    }
+
+    /** @test */
+    public function somethings3()
+    {
+        app()->bind(
+            \CyrildeWit\EloquentViewable\Contracts\View::class,
+            \CyrildeWit\EloquentViewable\Tests\TestClasses\ViewSoftdeletes::class
+        );
+
+        $postSoftdeletes = factory(PostSoftdeletes::class)->create();
+
+        TestHelper::createView($postSoftdeletes);
+        TestHelper::createView($postSoftdeletes);
+        TestHelper::createView($postSoftdeletes);
+
+        $this->assertEquals(3, \CyrildeWit\EloquentViewable\Tests\TestClasses\ViewSoftdeletes::count());
+
+        $postSoftdeletes->delete();
+
+        $this->assertEquals(0, \CyrildeWit\EloquentViewable\Tests\TestClasses\ViewSoftdeletes::count());
+        $this->assertEquals(3, $postSoftdeletes->views()->withTrashed()->count());
+
+        //
+
+        $postSoftdeletes->restore();
+
+        $this->assertEquals(3, \CyrildeWit\EloquentViewable\Tests\TestClasses\ViewSoftdeletes::count());
+        $this->assertEquals(3, $postSoftdeletes->views()->count());
+    }
 }

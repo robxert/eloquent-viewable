@@ -19,11 +19,23 @@ class PostSoftdeletes extends Model implements Viewable
      *
      * @var string
      */
-    protected $table = 'posts';
+    protected $table = 'posts_two';
     /**
      * The attributes that aren't mass assignable.
      *
      * @var array
      */
     protected $guarded = [];
+
+    /**
+     * The "booted" method of the model.
+     *
+     * @return void
+     */
+    protected static function booted()
+    {
+        static::restored(function ($post) {
+            $post->views()->restore();
+        });
+    }
 }
